@@ -1,0 +1,53 @@
+REM   Script: Session 08
+REM   SQL TABLE
+
+CREATE TABLE Status ( 
+    Status_code VARCHAR2(6) PRIMARY KEY, 
+    Name CHAR(20) 
+);
+
+CREATE TABLE Ready_Reason ( 
+    Reason_code VARCHAR2(15) PRIMARY KEY, 
+    Name CHAR(20) 
+);
+
+CREATE TABLE Delay_Reason ( 
+    Reason_code VARCHAR2(15) PRIMARY KEY, 
+    Name CHAR(20) 
+);
+
+CREATE TABLE Event ( 
+    Event_id VARCHAR2(6) PRIMARY KEY, 
+    Duration NUMBER(20), 
+    Status_code VARCHAR2(6), 
+    Reason_code VARCHAR2(15), 
+    FOREIGN KEY (Status_code) REFERENCES Status(Status_code), 
+    FOREIGN KEY (Reason_code) REFERENCES Ready_Reason(Reason_code) 
+);
+
+SELECT  
+    e.Event_id,  
+    e.Duration,  
+    s.Name AS Status_Name,  
+    e.Reason_code 
+FROM  
+    Event e 
+INNER JOIN  
+    Status s ON e.Status_code = s.Status_code;
+
+SELECT  
+    Reason_code,  
+    Name AS Reason_Name,  
+    'Ready' AS Reason_Type 
+FROM  
+    Ready_Reason 
+ 
+UNION ALL 
+ 
+SELECT  
+    Reason_code,  
+    Name AS Reason_Name,  
+    'Delay' AS Reason_Type 
+FROM  
+    Delay_Reason;
+

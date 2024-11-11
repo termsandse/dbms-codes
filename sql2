@@ -1,0 +1,98 @@
+REM   Script: Session 07
+REM   sql tables
+
+CREATE TABLE CUSTOMER ( 
+    CustID INT PRIMARY KEY, 
+    Last_Name VARCHAR(100), 
+    First_Name VARCHAR(100) 
+);
+
+CREATE TABLE ORDERS ( 
+    Order_ID INT PRIMARY KEY, 
+    Order_Date DATE, 
+    Customer_SID INT, 
+    Amount DECIMAL(10, 2), 
+    CONSTRAINT FK_Customer FOREIGN KEY (Customer_SID) REFERENCES CUSTOMER(CustID), 
+    CHECK (Amount > 20000) 
+);
+
+INSERT INTO CUSTOMER (CustID, Last_Name, First_Name) VALUES 
+(1, 'Smith', 'John');
+
+INSERT INTO CUSTOMER (CustID, Last_Name, First_Name) VALUES 
+(2, 'Singh', 'Mansi');
+
+INSERT INTO CUSTOMER (CustID, Last_Name, First_Name) VALUES 
+(3, 'Judeja', 'Manik');
+
+INSERT INTO CUSTOMER (CustID, Last_Name, First_Name) VALUES 
+(4, 'Williams', 'siya');
+
+INSERT INTO CUSTOMER (CustID, Last_Name, First_Name) VALUES 
+(5, 'Jones', 'Yug');
+
+INSERT INTO ORDERS (Order_ID, Order_Date, Customer_SID, Amount) VALUES 
+(101, TO_DATE('2024-01-01', 'YYYY-MM-DD'), 1, 25000.00);
+
+INSERT INTO ORDERS (Order_ID, Order_Date, Customer_SID, Amount) VALUES 
+(102, TO_DATE('2024-01-05', 'YYYY-MM-DD'), 2, 22000.00);
+
+INSERT INTO ORDERS (Order_ID, Order_Date, Customer_SID, Amount) VALUES 
+(103, TO_DATE('2024-01-10', 'YYYY-MM-DD'), 3, 28000.00);
+
+INSERT INTO ORDERS (Order_ID, Order_Date, Customer_SID, Amount) VALUES 
+(104, TO_DATE('2024-01-12', 'YYYY-MM-DD'), 4, 35000.00);
+
+INSERT INTO ORDERS (Order_ID, Order_Date, Customer_SID, Amount) VALUES 
+(105, TO_DATE('2024-01-15', 'YYYY-MM-DD'), 5, 21000.00);
+
+SELECT  
+    C.CustID, 
+    C.Last_Name, 
+    C.First_Name, 
+    O.Amount 
+FROM  
+    CUSTOMER C 
+JOIN  
+    ORDERS O ON C.CustID = O.Customer_SID;
+
+SELECT  
+    C.CustID,  
+    C.Last_Name,  
+    C.First_Name 
+FROM  
+    CUSTOMER C 
+WHERE  
+    C.Last_Name LIKE '%s' OR C.First_Name LIKE '%s';
+
+SELECT  
+    O.Order_ID,  
+    O.Order_Date,  
+    O.Amount 
+FROM  
+    ORDERS O 
+WHERE  
+    O.Amount BETWEEN 21000 AND 30000;
+
+SELECT  
+    O.Order_ID,  
+    O.Order_Date,  
+    (O.Amount + 500) AS "New Amount" 
+FROM  
+    ORDERS O;
+
+SELECT  
+    O.Order_ID,  
+    SUM(O.Amount) AS Total_Amount 
+FROM  
+    ORDERS O 
+GROUP BY  
+    O.Order_ID;
+
+SELECT  
+    SUM(O.Amount) AS Total_Amount 
+FROM  
+    ORDERS O 
+WHERE  
+    O.Amount > 15000;
+
